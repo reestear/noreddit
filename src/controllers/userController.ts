@@ -1,5 +1,10 @@
 import { Request, Response } from 'express';
-import { createUser, getAllUsers, getUserById } from '../services/userService';
+import {
+  createUser,
+  getAllUsers,
+  getUserById,
+  joinCommunity,
+} from '../services/userService';
 import { errorResponse, successResponse } from '../utils/responseUtils';
 
 export const createUserHandler = async (req: Request, res: Response) => {
@@ -49,6 +54,25 @@ export const getAllUsersHandler = async (req: Request, res: Response) => {
       .json(
         errorResponse(
           'Failed to fetch users',
+          error instanceof Error ? error.message : 'Unknown error'
+        )
+      );
+  }
+};
+
+export const joinCommunityHandler = async (req: Request, res: Response) => {
+  try {
+    const { userID, communityID } = req.params;
+    const user = await joinCommunity(userID, communityID);
+    res
+      .status(200)
+      .json(successResponse('User joined community successfully', user));
+  } catch (error) {
+    res
+      .status(500)
+      .json(
+        errorResponse(
+          'Failed to join community',
           error instanceof Error ? error.message : 'Unknown error'
         )
       );
