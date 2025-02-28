@@ -30,7 +30,7 @@ export const config = {
     url: process.env.MONGODB_URL || 'mongodb://localhost:27017',
   },
   secrets: {
-    jwt: process.env.JWT_SECRET,
+    jwt: process.env.JWT_SECRET || 'default-secret',
     jwtExp: 31557600,
   },
 };

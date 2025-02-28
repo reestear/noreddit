@@ -4,14 +4,44 @@ import {
   getAllUsers,
   getUserById,
   joinCommunity,
+  updateUserById,
 } from '../services/userService';
+import { createAccessToken } from '../utils/authUtils';
 import { errorResponse, successResponse } from '../utils/responseUtils';
+
+export const updateUserHandler = async (req: any, res: Response) => {
+  try {
+    const userData = req.body;
+    const user_id = req.user_id;
+
+    console.log('user_id', user_id);
+    console.log('userData', userData);
+
+    const user = await updateUserById(user_id, userData);
+
+    res.status(200).json(successResponse('User updated successfully', user));
+  } catch (error) {
+    res
+      .status(500)
+      .json(
+        errorResponse(
+          'Failed to update user',
+          error instanceof Error ? error.message : 'Unknown error'
+        )
+      );
+  }
+};
 
 export const createUserHandler = async (req: Request, res: Response) => {
   try {
     const userData = req.body;
     const user = await createUser(userData);
-    res.status(201).json(successResponse('User created successfully', user));
+
+    const accessToken = createAccessToken(user);
+
+    res
+      .status(201)
+      .json(successResponse('User created successfully', { accessToken }));
   } catch (error) {
     res
       .status(500)

@@ -9,6 +9,17 @@ export const getUserById = async (userId: string) => {
   return await User.findById(userId);
 };
 
+export const updateUserById = async (userId: string, userData: IUser) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(userId, userData, {
+      new: true,
+    });
+    return updatedUser;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getAllUsers = async () => {
   return await User.find();
 };
