@@ -27,7 +27,17 @@ export const config = {
     dbName: process.env.MONGODB_DB_NAME,
     username: process.env.MONGODB_USERNAME,
     password: process.env.MONGODB_PASSWORD,
-    url: process.env.MONGODB_URL || 'mongodb://localhost:27017',
+    url: process.env.MONGODB_URL || 'mongodb://localhost:27017/noreddit',
+  },
+  mysql: {
+    host: process.env.MYSQL_HOST,
+    port: process.env.MYSQL_PORT,
+    dbName: process.env.MYSQL_DB_NAME,
+    username: process.env.MYSQL_USERNAME,
+    password: process.env.MYSQL_PASSWORD,
+    url:
+      process.env.MYSQL_URL ||
+      'mysql://root:rootmaster@localhost:3306/cpnoreddit',
   },
   secrets: {
     jwt: process.env.JWT_SECRET || 'default-secret',

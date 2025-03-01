@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { config } from '../config';
+import { pool } from '../config/db';
 import { User } from '../models/userModel';
-import { createUser } from '../services/userService';
+import { IUserData } from '../types/authTypes';
 import {
   comparePasswords,
   createAccessToken,
@@ -12,12 +13,39 @@ import {
 import { errorResponse, successResponse } from '../utils/responseUtils';
 
 const registerHandler = async (req: Request, res: Response) => {
-  try {
-    const userData = req.body;
-    userData.password = hashPassword(userData.password);
+  // try {
+  //   const userData = req.body;
+  //   userData.password = hashPassword(userData.password);
 
-    const user = await createUser(userData);
-    res.status(201).json(successResponse('User created successfully', user));
+  //   const user = await createUser(userData);
+  //   res.status(201).json(successResponse('User created successfully', user));
+  // } catch (error) {
+  //   res
+  //     .status(500)
+  //     .json(
+  //       errorResponse(
+  //         'Failed to create user',
+  //         error instanceof Error ? error.message : 'Unknown error'
+  //       )
+  //     );
+  // }
+
+  try {
+    let {
+      username,
+      email,
+      password,
+      isAdmin,
+      bio,
+      profileImageUrl,
+    }: IUserData = req.body;
+    password = hashPassword(password);
+
+    const [rows]: any = await pool.query(
+      'CALL sp_create_user(?, ?, ?, ?, ?, ?)',
+      [username, email, password, isAdmin, bio, profileImageUrl]
+    );
+    res.status(201).json(successResponse('User created successfully', null));
   } catch (error) {
     res
       .status(500)

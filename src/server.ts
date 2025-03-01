@@ -1,13 +1,20 @@
 import app from './app';
 import { config, connectDB, initConfig } from './config';
 
-function initProject() {
+async function initProject() {
   initConfig();
-  connectDB();
+  await connectDB();
 }
 
-initProject();
+initProject()
+  .then(() => {
+    console.log('Database connected successfully');
 
-app.listen(config.port, () => {
-  console.log(`Server is running on http://localhost:${config.port}`);
-});
+    app.listen(config.port, () => {
+      console.log(`Server is running on http://localhost:${config.port}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Database connection error:', error);
+    process.exit(1);
+  });
