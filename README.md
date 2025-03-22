@@ -1,6 +1,6 @@
 # NFactorial Node.JS
 
-This is a simple clone of Reddit with classical MERN Stack and MySQL.
+This is a simple clone of Reddit with classical MERN Stack and MySql for NFactorial NODEJS course
 
 ## Installation
 
